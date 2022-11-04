@@ -7,8 +7,10 @@ const invalidAddress1 = '888E02932D45A8d116D9E1A8D3799aAB7c804A3c6E';
 const invalidAddress2 = 'satoshi';
 const invalidAddress3 = '';
 
-function getSuccessMessage(prefixNumber = 4, suffixNumber = 4) {
-  return `should return the address truncated with ${prefixNumber} characters on the left of the ellipsis (excluding "0x") and ${suffixNumber} on the right`;
+function getSuccessMessage(nPrefix = 4, nSuffix = 4) {
+  return `should return the address truncated with ${nPrefix} character${
+    nPrefix > 1 ? 's' : ''
+  } on the left of the ellipsis (excluding "0x") and ${nSuffix} on the right`;
 }
 
 describe('shortenAddress()', () => {
@@ -19,19 +21,39 @@ describe('shortenAddress()', () => {
       expect(shortenAddress(addr3)).toEqual('0x8E02…3c6E');
     });
 
-    describe('...and a prefixNumber of 1', () => {
+    describe('...and a nPrefix of 1', () => {
       it(getSuccessMessage(1), () => {
-        expect(shortenAddress(addr1, 1)).toEqual('0xF…8175');
-        expect(shortenAddress(addr2, 1)).toEqual('0x2…867e');
-        expect(shortenAddress(addr3, 1)).toEqual('0x8…3c6E');
+        expect(shortenAddress(addr1, { nPrefix: 1 })).toEqual('0xF…8175');
+        expect(shortenAddress(addr2, { nPrefix: 1 })).toEqual('0x2…867e');
+        expect(shortenAddress(addr3, { nPrefix: 1 })).toEqual('0x8…3c6E');
       });
+    });
 
-      describe('...and a suffixNumber of 10', () => {
-        it(getSuccessMessage(1, 10), () => {
-          expect(shortenAddress(addr1, 1, 10)).toEqual('0xF…05835C8175');
-          expect(shortenAddress(addr2, 1, 10)).toEqual('0x2…6ac875867e');
-          expect(shortenAddress(addr3, 1, 10)).toEqual('0x8…7c804A3c6E');
-        });
+    describe('...and a nSuffix of 10', () => {
+      it(getSuccessMessage(4, 10), () => {
+        expect(shortenAddress(addr1, { nSuffix: 10 })).toEqual(
+          '0xF739…05835C8175'
+        );
+        expect(shortenAddress(addr2, { nSuffix: 10 })).toEqual(
+          '0x2a81…6ac875867e'
+        );
+        expect(shortenAddress(addr3, { nSuffix: 10 })).toEqual(
+          '0x8E02…7c804A3c6E'
+        );
+      });
+    });
+
+    describe('...and both a nPrefix of 6 and a nSuffix of 7', () => {
+      it(getSuccessMessage(6, 6), () => {
+        expect(shortenAddress(addr1, { nPrefix: 6, nSuffix: 7 })).toEqual(
+          '0xF73999…35C8175'
+        );
+        expect(shortenAddress(addr2, { nPrefix: 6, nSuffix: 7 })).toEqual(
+          '0x2a81d9…875867e'
+        );
+        expect(shortenAddress(addr3, { nPrefix: 6, nSuffix: 7 })).toEqual(
+          '0x8E0293…04A3c6E'
+        );
       });
     });
   });
