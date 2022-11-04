@@ -1,7 +1,13 @@
-export function shortenAddress(address: string) {
-  const match = address.match(
-    /^(0x[a-zA-Z0-9]{4})[a-zA-Z0-9]+([a-zA-Z0-9]{4})$/
-  );
+export function shortenAddress(
+  address: string,
+  prefixNumber = 4,
+  suffixNumber = 4
+) {
+  const match = address.match(/^(0x[a-zA-Z0-9])[a-zA-Z0-9]+([a-zA-Z0-9])$/);
 
-  return match ? `${match[1]}…${match[2]}` : address;
+  return match
+    ? `0x${address.slice(2, 2 + prefixNumber)}…${address.slice(
+        address.length - suffixNumber
+      )}`
+    : address;
 }
