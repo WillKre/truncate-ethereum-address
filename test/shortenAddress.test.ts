@@ -13,6 +13,10 @@ function getSuccessMessage(nPrefix = 4, nSuffix = 4) {
   } on the left of the ellipsis (excluding "0x") and ${nSuffix} on the right`;
 }
 
+function getErrorMessage() {
+  return 'should return the original input';
+}
+
 describe('shortenAddress()', () => {
   describe('given a valid address', () => {
     it(getSuccessMessage(), () => {
@@ -56,10 +60,28 @@ describe('shortenAddress()', () => {
         );
       });
     });
+
+    describe('...and an nPrefix / nSuffix which is longer than the address', () => {
+      it(getErrorMessage(), () => {
+        expect(shortenAddress(addr1, { nPrefix: 43, nSuffix: 0 })).toEqual(
+          addr1
+        );
+      });
+      it(getErrorMessage(), () => {
+        expect(shortenAddress(addr2, { nPrefix: 22, nSuffix: 22 })).toEqual(
+          addr2
+        );
+      });
+      it(getErrorMessage(), () => {
+        expect(shortenAddress(addr3, { nPrefix: 0, nSuffix: 43 })).toEqual(
+          addr3
+        );
+      });
+    });
   });
 
   describe('given an invalid address', () => {
-    it('should return the original input', () => {
+    it(getErrorMessage(), () => {
       expect(shortenAddress(invalidAddress1)).toEqual(invalidAddress1);
       expect(shortenAddress(invalidAddress2)).toEqual(invalidAddress2);
       expect(shortenAddress(invalidAddress3)).toEqual(invalidAddress3);
