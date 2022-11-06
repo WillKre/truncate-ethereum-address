@@ -1,35 +1,11 @@
 # truncate-ethereum-address
 
-Easily format an Ethereum address (eg. `"0xab5801a7d398351b8be11c439e05c5b3259aec9b"`) to a truncated version (`"0xab58…ec9b"`).
+Easily format an Ethereum address (eg. `'0xab5801a7d398351b8be11c439e05c5b3259aec9b'`) to a truncated version (eg. `'0xab58[…]ec9b'`).
 
 ## Install
 
 ```bash
 npm install truncate-ethereum-address # or yarn add truncate-ethereum-address
-```
-
-## Usage Examples
-
-```ts
-// Passing in an `address` only:
-truncate('0xF73999E8995E174625881B2204171d05835C8175'); // "0xF739…8175"
-// The `nPrefix` and `nSuffix` each default to showing 4 characters (excluding the "0x") if not provided
-
-// Passing in an `address` and `nPrefix`:
-truncate('0x2a81d91e19A7B9Fcda8D1aDd9a82986ac875867e', { nPrefix: 1 }); // "0x2…867e"
-
-// Passing in an `address` and `nSuffix`:
-truncate('0x8E02932D45A8d116D9E1A8D3799aAB7c804A3c6E', { nSuffix: 10 }); // "0x8E02…7c804A3c6E"
-
-// Passing in an `address`, `nPrefix` and `nSuffix`:
-truncate('0xF73999E8995E174625881B2204171d05835C8175', {
-  nPrefix: 6,
-  nSuffix: 7,
-}); // "0xF73999…35C8175"
-
-// Passing in an invalid string which doesn"t match the RegEx:
-truncate('888E02932D45A8d116D9E1A8D3799aAB7c804A3c6E'); // "888E02932D45A8d116D9E1A8D3799aAB7c804A3c6E"
-// Returns the initial input
 ```
 
 ## Types
@@ -38,9 +14,41 @@ truncate('888E02932D45A8d116D9E1A8D3799aAB7c804A3c6E'); // "888E02932D45A8d116D9
 type Params = {
   nPrefix?: number;
   nSuffix?: number;
+  separator?: 'braces' | 'brackets' | 'parenthesis';
 };
 
-function truncate(address: string, { nPrefix, nSuffix }?: Params): string;
+function truncate(address: string, { nPrefix, nSuffix, separator }?: Params): string;
+```
+
+## Usage Examples
+
+```ts
+import { truncate } from 'truncate-ethereum-address';
+
+// Passing in an `address` only:
+truncate('0xF73999E8995E174625881B2204171d05835C8175'); // '0xF739…8175'
+// The `nPrefix` and `nSuffix` each default to showing 4 characters (excluding the '0x') if not provided
+
+// Passing in an `address` and a `separator`:
+truncate('0xF73999E8995E174625881B2204171d05835C8175', { separator: 'braces' }); // '0xF739{…}8175';
+truncate('0x2a81d91e19A7B9Fcda8D1aDd9a82986ac875867e', { separator: 'brackets' }); // '0x2a81[…]867e';
+truncate('0x8E02932D45A8d116D9E1A8D3799aAB7c804A3c6E', { separator: 'parenthesis' }); // '0x8E02(…)3c6E';
+
+// Passing in an `address` and `nPrefix`:
+truncate('0x2a81d91e19A7B9Fcda8D1aDd9a82986ac875867e', { nPrefix: 1 }); // '0x2…867e'
+
+// Passing in an `address` and `nSuffix`:
+truncate('0x8E02932D45A8d116D9E1A8D3799aAB7c804A3c6E', { nSuffix: 10 }); // '0x8E02…7c804A3c6E'
+
+// Passing in an `address`, `nPrefix` and `nSuffix`:
+truncate('0xF73999E8995E174625881B2204171d05835C8175', {
+  nPrefix: 6,
+  nSuffix: 7,
+}); // '0xF73999…35C8175'
+
+// Passing in an invalid string which doesn't match the RegEx:
+truncate('888E02932D45A8d116D9E1A8D3799aAB7c804A3c6E'); // '888E02932D45A8d116D9E1A8D3799aAB7c804A3c6E'
+// Returns the initial input
 ```
 
 ## Dev

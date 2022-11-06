@@ -49,7 +49,7 @@ describe('truncate()', () => {
       });
     });
 
-    describe('...and an nPrefix / nSuffix which is longer than the address', () => {
+    describe('...and an nPrefix and/or nSuffix which is longer than the address', () => {
       it(getErrorMessage(), () => {
         expect(truncate(addr1, { nPrefix: 43, nSuffix: 0 })).toEqual(addr1);
       });
@@ -58,6 +58,14 @@ describe('truncate()', () => {
       });
       it(getErrorMessage(), () => {
         expect(truncate(addr3, { nPrefix: 0, nSuffix: 43 })).toEqual(addr3);
+      });
+    });
+
+    describe('...and a separator specified', () => {
+      it(`${getSuccessMessage()} with the correct syntax`, () => {
+        expect(truncate(addr1, { separator: 'braces' })).toEqual('0xF739{…}8175');
+        expect(truncate(addr2, { separator: 'brackets' })).toEqual('0x2a81[…]867e');
+        expect(truncate(addr3, { separator: 'parenthesis' })).toEqual('0x8E02(…)3c6E');
       });
     });
   });
